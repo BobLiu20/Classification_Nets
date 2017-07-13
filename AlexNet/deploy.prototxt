@@ -1,39 +1,16 @@
 name: "AlexNet_cifar10"
 
 layer {
-  name: "cifar"
-  type: "Data"
+  name: "Input1"
+  type: "Input"
   top: "data"
-  top: "label"
-  include {
-    phase: TRAIN
-  }
-  transform_param {
-    mean_file: "../data/mean.binaryproto"
-    crop_size: 32
-  }
-  data_param {
-    source: "../data/cifar10_train_lmdb"
-    batch_size: 128
-    backend: LMDB
-  }
-}
-layer {
-  name: "cifar"
-  type: "Data"
-  top: "data"
-  top: "label"
-  include {
-    phase: TEST
-  }
-  transform_param {
-    mean_file: "../data/mean.binaryproto"
-    crop_size: 32
-  }
-  data_param {
-    source: "../data/cifar10_test_lmdb"
-    batch_size: 128
-    backend: LMDB
+  input_param {
+    shape {
+      dim: 1
+      dim: 3
+      dim: 32
+      dim: 32
+    }
   }
 }
 
@@ -267,20 +244,4 @@ layer {
     num_output: 10
   }
 }
-layer {
-  name: "accuracy"
-  type: "Accuracy"
-  bottom: "InnerProduct2"
-  bottom: "label"
-  top: "accuracy"
-  include {
-    phase: TEST
-  }
-}
-layer {
-  name: "SoftmaxWithLoss1"
-  type: "SoftmaxWithLoss"
-  bottom: "InnerProduct2"
-  bottom: "label"
-  top: "SoftmaxWithLoss1"
-}
+
