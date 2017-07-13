@@ -1,3 +1,5 @@
+[切换到中文版说明](https://github.com/BobLiu20/Classification_Nets/blob/master/README_CN.md)    
+
 ### What
 Testing all cls nets in cifar10 in order to compare them.
 
