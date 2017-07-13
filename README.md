@@ -54,7 +54,7 @@ Testing all cls nets in cifar10 in order to compare them.
   The time of predict is 2.2 ms. (one image with 32x32)   
 
 * NetworkInNetwork: NIN    
-  The size of model: 25KB    
+  The size of model: 25MB   
   The accuracy of testing is 0.8346 after 64000 Iterations.    
   The time of training is 40 mins in GTX1080.    
   The time of predict is 1.8 ms. (one image with 32x32)    
