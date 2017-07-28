@@ -100,3 +100,12 @@
   训练耗时: 1 hours in GTX1080 ti.    
   预测耗时: 7.2 ms. (one image with 32x32)    
 
+* DenseNet    
+  模型大小: 4MB.    
+  测试精度: 0.9153 after 64000 Iterations.    
+  训练时显存消耗: 7.9GB in training. (batch size is 32+32).    
+  训练耗时: 3.5 hours in GTX1080 ti.    
+  预测耗时: 12.95 ms. (one image with 32x32)    
+
+
+

@@ -99,3 +99,14 @@ Testing all cls nets in cifar10 in order to compare them.
   The time of training is 1 hours in GTX1080 ti.    
   The time of predict is 7.2 ms. (one image with 32x32)    
 
+
+* DenseNet: (Ref to [here](https://github.com/liuzhuang13/DenseNetCaffe))    
+  The size of model: 4MB.    
+  The accuracy of testing is 0.9153 after 64000 Iterations.    
+  The memory usage of GPU is 7.9GB in training. (batch size is 32+32).    
+  The time of training is 3.5 hours in GTX1080 ti.    
+  The time of predict is 12.95 ms. (one image with 32x32)    
+
+
+
+
