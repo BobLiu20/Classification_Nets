@@ -24,6 +24,8 @@ tf.app.flags.DEFINE_string(
     'dataset_dir', "/world/data-c9/liubofang/dataset_original/cifar10",
     'The directory where the dataset files are stored.')
 tf.app.flags.DEFINE_string(
+    'dataset_name', 'cifar10', 'The name of the dataset to load.')
+tf.app.flags.DEFINE_string(
     'gpus', "6,", 'which gpu to used.')
 tf.app.flags.DEFINE_integer(
     'num_readers', 4,
@@ -32,17 +34,17 @@ tf.app.flags.DEFINE_integer(
     'num_preprocessing_threads', 10,
     'The number of threads used to create the batches.')
 tf.app.flags.DEFINE_integer(
-    'batch_size', 64, 'The number of samples in each batch.')
+    'batch_size', 256, 'The number of samples in each batch.')
 tf.app.flags.DEFINE_integer(
     'train_image_size', None, 'Train image size')
 tf.app.flags.DEFINE_string(
     'restore_ckpt', "", 'Restore checkpoint.')
 tf.app.flags.DEFINE_string(
-    'model_name', 'inception_v3', 'The name of the architecture to train.')
+    'model_name', 'cifarnet', 'The name of the architecture to train.')
 tf.app.flags.DEFINE_integer(
     'try_num', 0, 'Try num flag.')
 tf.app.flags.DEFINE_string(
-    'working_root', "/world/data-c9/liubofang/training/classification/cifar10",
+    'working_root', "/world/data-c9/liubofang/training/classification",
     'Working root folder.')
 tf.app.flags.DEFINE_float('base_lr', 0.01, 'Initial learning rate.')
 
@@ -54,12 +56,13 @@ def main(_):
     os.environ['CUDA_VISIBLE_DEVICES'] = FLAGS.gpus
     num_gpus = len(FLAGS.gpus.split(','))
     # save prefix
-    prefix = '%s/%s/%d' % (FLAGS.working_root, FLAGS.model_name, FLAGS.try_num)
+    prefix = '%s/%s/%s/%d' % (FLAGS.working_root, FLAGS.dataset_name,
+                              FLAGS.model_name, FLAGS.try_num)
     if not os.path.exists(prefix):
         os.makedirs(prefix)
     with tf.Graph().as_default():
         # Create a dataset provider that loads data from the dataset #
-        dataset = dataset_factory.get_dataset("cifar10", "train", FLAGS.dataset_dir)
+        dataset = dataset_factory.get_dataset(FLAGS.dataset_name, "train", FLAGS.dataset_dir)
         # Create a model
         network_fn = nets_factory.get_network_fn(
             FLAGS.model_name,
@@ -98,7 +101,7 @@ def main(_):
         learning_rate = get_learning_rate("exponential", FLAGS.base_lr,
                                           global_step, decay_steps=10000)
         # Create optimizer
-        optimizer = get_optimizer('sgd', learning_rate)
+        optimizer = get_optimizer('rmsprop', learning_rate)
         train_op = optimizer.minimize(loss, global_step=global_step)
         # Create sess
         sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
@@ -125,10 +128,11 @@ def main(_):
                     cost_time, start_time = end_time - start_time, end_time
                     sample_per_sec = int(10 * FLAGS.batch_size / cost_time)
                     sec_per_step = cost_time / 10.0
+                    epoch = step * FLAGS.batch_size / dataset.num_samples
                     print ('[%s] epochs: %d, step: %d, lr: %f, loss: %.4f, '
                            'sample/s: %d, sec/step: %.3f' % (
                                datetime.datetime.now().strftime("%Y%m%d_%H%M%S"),
-                               -1, step, lr, ploss,
+                               epoch, step, lr, ploss,
                                sample_per_sec, sec_per_step))
             if step % 1024 == 0:
                 checkpoint_path = os.path.join(prefix, 'model.ckpt')
