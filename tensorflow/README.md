@@ -1,7 +1,7 @@
 ### Implement popular models by tensorflow
 
  1. Using two different API:
- * **train_estimator.py**: Using tf.estimator API
+ * **train_estimator.py**: Using tf.estimator API. Support tensorflow queue reader and multi GPU
  * **train_low_level.py**: Using low level API
 
  2. Test in tensorflow 1.3.0
